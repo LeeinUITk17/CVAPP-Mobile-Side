@@ -1,70 +1,142 @@
-import { Image, StyleSheet, Platform } from 'react-native';
-
+import React, { useState, useEffect, useContext } from 'react';
+import { Image, StyleSheet, View, Text, ScrollView } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+import Footer from '@/components/child_components/Footer';
+import Option from '@/components/child_components/Option';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { UserProfileContext } from '@/hooks/profileContext';
+// interface UserProfile {
+//   name: string;
+// }
 
 export default function HomeScreen() {
+  const userProfileContext = useContext(UserProfileContext);
+  if (!userProfileContext) {
+    return null; 
+  }
+  const { userProfile, setUserProfile } = userProfileContext;
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
+    <ScrollView style={styles.container}>
+      <View style={styles.headerImageContainer}>
         <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
+          source={{ uri: 'https://res.cloudinary.com/dbonwxmgl/image/upload/v1726731631/mauh8cky29vbpft7aqpf.jpg' }} 
+          style={styles.profilePicture}
         />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({ ios: 'cmd + d', android: 'cmd + m' })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+        <View style={styles.headerTextContainer}>
+          <Text style={styles.headerText}>
+            <Ionicons name="home-outline" color="black" size={20} /> HomePage
+          </Text>
+        </View>
+        <Option />
+      </View>
+      <View style={styles.contentContainer}>
+        <View style={styles.titleContainer}>
+          <Text style={styles.titleText}>
+            Welcome to My CV{userProfile ? `, ${userProfile.name}` : ''}
+          </Text>
+          <HelloWave />
+        </View>
+        
+        <View style={styles.stepContainer}>
+          <Text style={styles.sectionTitle}>Introduction</Text>
+          <Text style={styles.sectionText}>
+            Hi, I'm {userProfile ? userProfile.name : 'Le Thanh Tai'}, a passionate Backend Developer with experience in Node.js, MongoDB, and Express.js. 
+            Explore my skills and projects to see how I can contribute to your team.
+          </Text>
+        </View>
+
+        <View style={styles.stepContainer}>
+          <Text style={styles.sectionTitle}>Experience</Text>
+          <Text style={styles.sectionText}>
+            I am currently interning as a Full-stack Developer at Sun* Inc. where I work on various web application projects. 
+            My goal is to become an expert in optimizing processing speed and designing robust system architectures.
+          </Text>
+        </View>
+
+        <View style={styles.stepContainer}>
+          <Text style={styles.sectionTitle}>Projects</Text>
+          <Text style={styles.sectionText}>
+            Check out my recent projects including a Chrome extension for ChatGPT and various personal web applications. 
+            I am always looking to enhance my skills and explore new technologies.
+          </Text>
+        </View>
+
+        <View style={styles.stepContainer}>
+          <Text style={styles.sectionTitle}>Contact</Text>
+          <Text style={styles.sectionText}>
+            Feel free to reach out to me via email at 22521276@gm.uit.edu.vn or connect with me on LinkedIn.
+          </Text>
+        </View>
+      </View>
+      <Footer />
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
+  },
+  headerImageContainer: {
+    height: 250,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 16,
+  },
+  profilePicture: {
+    height: '100%',
+    width: '100%',
+    borderRadius: 100,
+  },
+  contentContainer: {
+    paddingHorizontal: 16,
+  },
   titleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    marginBottom: 16,
+    backgroundColor: 'orange',
+    borderRadius: 10,
+    alignSelf: 'center',
+    alignContent: 'center',
+    paddingLeft: 10,
+    paddingRight: 10,
+  },
+  titleText: {
+    fontSize: 24,
+    fontWeight: 'bold',
   },
   stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+    marginBottom: 16,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 8,
+    backgroundColor: 'orange',
+    alignSelf: 'flex-start',
+    borderRadius: 10,
+    paddingLeft: 10,
+    paddingRight: 10,
+  },
+  sectionText: {
+    fontSize: 14,
+    color: 'gray',
+  },
+  headerTextContainer: {
     position: 'absolute',
+    bottom: 20,
+    backgroundColor: 'rgba(250, 244, 230, 0.86)',
+    padding: 8,
+    borderRadius: 10,
+    alignItems: 'center',
+    alignSelf: 'center',
+  },
+  headerText: {
+    color: 'black',
+    fontSize: 24,
+    alignContent: 'center',
   },
 });
