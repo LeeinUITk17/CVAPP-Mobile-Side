@@ -4,19 +4,7 @@ import Footer from '@/components/child_components/Footer';
 import Option from '@/components/child_components/Option';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { UserProfileContext } from '@/hooks/profileContext';
-import axios from 'axios';
-// interface UserProfile {
-//   id: number;
-//   name: string;
-//   email: string;
-//   age: number;
-//   phone: string;
-//   address: string;
-//   linkedin: string;
-//   github: string;
-//   summary: string;
-//   avatar: string;
-// }
+
 const AboutScreen = () => {
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState<{ id: string; text: string; createdAt: string }[]>([]);

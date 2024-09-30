@@ -23,7 +23,7 @@ const Option = () => {
       router.push('/profile'); 
       setOpen(false); 
     } else if (value === 'update') {
-      // Handle update CV logic here
+      // router.push('/CV'); 
       setOpen(false); 
     } else if (value === 'logout') {
       router.push('/logout');
