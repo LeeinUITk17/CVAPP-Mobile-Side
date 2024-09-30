@@ -42,35 +42,35 @@ const AboutScreen = () => {
   };
 
   // Handle adding a comment
-  const handleAddComment = async () => {
-    if (!validation(comment)) return;
-    try {
-      const token = await AsyncStorage.getItem('access_token');
-      if (!userProfile) {
-        console.error('User profile is null');
-        return;
-      }
-      const response = await fetch(`http://192.168.130.91:3000/user/${userProfile.id}/comment`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ text: comment }),
-      });
+  // const handleAddComment = async () => {
+  //   if (!validation(comment)) return;
+  //   try {
+  //     const token = await AsyncStorage.getItem('access_token');
+  //     if (!userProfile) {
+  //       console.error('User profile is null');
+  //       return;
+  //     }
+  //     const response = await fetch(`http://192.168.130.91:3000/user/${userProfile.id}/comment`, {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //       body: JSON.stringify({ text: comment }),
+  //     });
 
-      if (response.ok) {
-        const newComment = await response.json();
-        setComments([...comments, newComment]);
-        setComment('');
-        alertFunction(newComment.text);
-      } else {
-        console.error('Failed to add comment');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  };
+  //     if (response.ok) {
+  //       const newComment = await response.json();
+  //       setComments([...comments, newComment]);
+  //       setComment('');
+  //       alertFunction(newComment.text);
+  //     } else {
+  //       console.error('Failed to add comment');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error:', error);
+  //   }
+  // };
 
   // Alert function to display the added comment
   const alertFunction = (comment: string) =>
@@ -132,7 +132,7 @@ const AboutScreen = () => {
         renderItem={renderComment}
         contentContainerStyle={styles.commentsContainer}
       />
-      <TextInput
+      {/* <TextInput
         style={styles.commentInput}
         placeholder="Write your comment here..."
         value={comment}
@@ -141,7 +141,7 @@ const AboutScreen = () => {
       {error ? <Text style={styles.errorText}>{error}</Text> : null}
       <TouchableOpacity style={styles.button} onPress={handleAddComment}>
         <Text style={styles.buttonText}>Add Comment</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
       </View>
       <Footer />
