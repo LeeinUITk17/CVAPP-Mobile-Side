@@ -8,7 +8,7 @@ interface PostProps {
     email: string;
     avatar: string;
     likes: number;
-    comments: Array<{ user: string; text: string; avatar: string }>;
+    comments: Array<{ user: { name: string; avatar: string }; text: string }>;
     linkedin?: string;
     github?: string;
     summary?: string;
@@ -52,11 +52,11 @@ const Post: React.FC<PostProps> = ({ data, onLike, onComment, like, comment }) =
         <View style={styles.commentsContainer}>
           {comments.map((comment, index) => (
             <View key={index} style={styles.comment}>
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Image source={{ uri: comment.avatar }} style={styles.iconComment} />
-                <Text style={styles.commentUser}>{comment.user}</Text>
-                </View>
-                <Text style={styles.commentText}>{comment.text}</Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Image source={{ uri: comment.user.avatar }} style={styles.iconComment} />
+                <Text style={styles.commentUser}>{comment.user.name}</Text>
+              </View>
+              <Text style={styles.commentText}>{comment.text}</Text>
             </View>
           ))}
         </View>
@@ -151,7 +151,6 @@ const styles = StyleSheet.create({
   },
   commentsContainer: {
     marginTop: 10,
-   // backgroundColor:"bisque",
     borderRadius: 5,
     padding: 10,
     marginBottom: 10,

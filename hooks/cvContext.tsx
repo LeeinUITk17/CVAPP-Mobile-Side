@@ -50,9 +50,11 @@ export const CVProvider = ({ children }: { children: ReactNode }) => {
           user: cv.user,
           likes: cv.likes,
           comments: cv.comments.map((comment: any) => ({
-            user: comment.user.name,
-            avatar: comment.user.avatar? comment.user.avatar : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-            text: comment.text, 
+            user: {
+              name: comment.user.name,
+              avatar: comment.user.avatar ? comment.user.avatar : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+            },
+            text: comment.text,
           })),
         }));
         setCvs(data);

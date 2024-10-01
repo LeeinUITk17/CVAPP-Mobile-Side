@@ -61,52 +61,35 @@ const ExploreScreen = () => {
   const handleLike = async (cvId: number) => {
     try {
       const token = await AsyncStorage.getItem('access_token');
-      if (!token) {
-        Alert.alert('Error', 'User not authenticated');
+      if (!token || !userProfile) {
+        Alert.alert('Error', 'Authentication failed');
         return;
       }
-      if (!userProfile) {
-        Alert.alert('Error', 'User profile not found');
-        return;
-      }
-
-      const response = like
-        ? await fetch(
-            `http://192.168.130.91:3000/user/${userProfile.id}/like/${cvId}`,
-            {
-              method: 'DELETE',
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          )
-        : await fetch(
-            `http://192.168.130.91:3000/user/${userProfile.id}/like/${cvId}`,
-            {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-      console.log(response.ok);
+  
+      const method = like ? 'DELETE' : 'POST';
+      const response = await fetch(`http://192.168.130.91:3000/user/${userProfile.id}/like/${cvId}`, {
+        method,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
       if (response.ok) {
-        setdatacvs((prev) =>
-          prev.map((post) =>
-            post.id === cvId
-              ? { ...post, likes: like ? post.likes.filter((like) => like !== userProfile.id) : [...post.likes, userProfile.id] }
-              : post
-          )
-        );
+        const updatedLikes = like 
+          ? datacvs.map(cv => cv.id === cvId ? { ...cv, likes: cv.likes.filter(id => id !== userProfile.id) } : cv)
+          : datacvs.map(cv => cv.id === cvId ? { ...cv, likes: [...cv.likes, userProfile.id] } : cv);
+  
+        setdatacvs(updatedLikes);
         setLike(!like);
       } else {
         Alert.alert('Error', 'Failed to update like status');
       }
     } catch (error) {
       console.error('Error:', error);
+      Alert.alert('Error', 'An error occurred');
     }
   };
+  
   const handleComment = async (cvId: number) => {
     if (!commentText.trim()) {
       Alert.alert('Error', 'Comment cannot be empty.');
