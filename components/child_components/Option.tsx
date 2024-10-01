@@ -10,7 +10,6 @@ const Option = () => {
   const [value, setValue] = useState<string | null>(null);
   const [items, setItems] = useState([
     { label: 'My Profile', value: 'profile' },
-    { label: 'Update CV', value: 'update' },
     { label: 'Log out', value: 'logout' },
   ]);
   const router = useRouter();
@@ -21,9 +20,6 @@ const Option = () => {
   useEffect(() => {
     if (value === 'profile') {
       router.push('/profile'); 
-      setOpen(false); 
-    } else if (value === 'update') {
-      // router.push('/CV'); 
       setOpen(false); 
     } else if (value === 'logout') {
       router.push('/logout');
