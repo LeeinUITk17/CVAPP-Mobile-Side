@@ -9,6 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CVContext } from '@/hooks/cvContext';
 import { UserProfileContext } from '@/hooks/profileContext';
 import axios from 'axios';
+import Constants from 'expo-constants';
 interface User {
   name: string;
   email: string;
@@ -50,7 +51,7 @@ const ExploreScreen = () => {
     return null;
   }
   const { cvs, setCvs } = cvContext;
-
+ const IPv4 = Constants.expoConfig?.extra?.IPv4_Address_URL;
   const userProfileContext = useContext(UserProfileContext);
   if (!userProfileContext) {
     return null;
@@ -67,7 +68,7 @@ const ExploreScreen = () => {
       }
   
       const method = like ? 'DELETE' : 'POST';
-      const response = await fetch(`http://192.168.130.91:3000/user/${userProfile.id}/like/${cvId}`, {
+      const response = await fetch(`${IPv4}/user/${userProfile.id}/like/${cvId}`, {
         method,
         headers: {
           Authorization: `Bearer ${token}`,
@@ -109,7 +110,7 @@ const ExploreScreen = () => {
       }
       console.log(commentText);
       console.log(datacvs);
-      const response = await fetch(`http://192.168.130.91:3000/user/${userProfile.id}/comment/${cvId}`, {
+      const response = await fetch(`${IPv4}/user/${userProfile.id}/comment/${cvId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -179,6 +180,9 @@ const ExploreScreen = () => {
         data={{
           name: item.user.name,
           email: item.user.email,
+          age: item.user.age,
+          phone: item.user.phone,
+          address: item.user.address,
           avatar: item.user.avatar,
           likes: item.likes || 0,
           comments: item.comments || [],

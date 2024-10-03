@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Link, useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Footer from '@/components/child_components/Footer';
-
+import Constants from 'expo-constants';
 const SignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -12,6 +12,7 @@ const SignIn = () => {
   const [error, setError] = useState('');
   const router = useRouter();
   const handleLogin = async () => {
+    const IPv4 = Constants.expoConfig?.extra?.IPv4_Address_URL;
     if (!email || !password) {
       Alert.alert('Validation Error', 'Email and Password cannot be empty');
       return;
@@ -21,7 +22,7 @@ const SignIn = () => {
     setError('');
 
     try {
-      const response = await axios.post<{ access_token: string }>('http://192.168.130.91:3000/auth/login', {
+      const response = await axios.post<{ access_token: string }>(`${IPv4}/auth/login`, {
         email,
         password,
       });

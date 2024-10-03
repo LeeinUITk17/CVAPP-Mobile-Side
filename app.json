@@ -2,6 +2,9 @@
   "expo": {
     "name": "ie307test",
     "slug": "ie307test",
+    "extra": {
+      "IPv4_Address_URL": "http://192.168.20.91:3000"
+    },
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",

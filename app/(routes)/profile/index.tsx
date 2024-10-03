@@ -4,6 +4,7 @@ import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Footer from '@/components/child_components/Footer';
+import Constants from 'expo-constants';
 interface UserProfile {
   id: number;
   name: string;
@@ -21,13 +22,13 @@ const ProfileScreen = () => {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState(false);
-
+  const IPv4 = Constants.expoConfig?.extra?.IPv4_Address_URL;
   // Fetch profile data
   useEffect(() => {
     const fetchProfile = async () => {
       try {
         const token = await AsyncStorage.getItem('access_token');
-        const response = await axios.get('http://192.168.130.91:3000/auth/profile', {
+        const response = await axios.get(`${IPv4}/auth/profile`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUserProfile(response.data as UserProfile);
@@ -71,7 +72,7 @@ const ProfileScreen = () => {
     try {
       const token = await AsyncStorage.getItem('access_token');
       const response = await axios.post(
-        `http://192.168.130.91:3000/user/${userProfile.id}/avatar`,
+        `${IPv4}/user/${userProfile.id}/avatar`,
         formData,
         {
           headers: {
@@ -96,7 +97,7 @@ const ProfileScreen = () => {
 
     try {
       const token = await AsyncStorage.getItem('access_token');
-      await axios.put(`http://192.168.130.91:3000/user/${userProfile.id}/profile`, userProfile, {
+      await axios.put(`${IPv4}/user/${userProfile.id}/profile`, userProfile, {
         headers: { Authorization: `Bearer ${token}` },
       });
       Alert.alert('Profile updated successfully!');

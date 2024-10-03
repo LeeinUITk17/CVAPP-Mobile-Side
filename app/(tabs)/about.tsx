@@ -4,12 +4,13 @@ import Footer from '@/components/child_components/Footer';
 import Option from '@/components/child_components/Option';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { UserProfileContext } from '@/hooks/profileContext';
-
+import Constants from 'expo-constants';
 const AboutScreen = () => {
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState<{ id: string; text: string; createdAt: string }[]>([]);
   const [error, setError] = useState('');
   const userProfileContext = useContext(UserProfileContext);
+  const IPv4 = Constants.expoConfig?.extra?.IPv4_Address_URL;
   if (!userProfileContext) {
     return null; 
   }
@@ -17,7 +18,7 @@ const AboutScreen = () => {
 
   const fetchComments = async () => {
     try {
-      const response = await fetch('http://192.168.130.91:3000/user/comments');
+      const response = await fetch(`${IPv4}/user/comments`);
       if (response.ok) {
         const data = await response.json();
         setComments(data);
@@ -50,7 +51,7 @@ const AboutScreen = () => {
   //       console.error('User profile is null');
   //       return;
   //     }
-  //     const response = await fetch(`http://192.168.130.91:3000/user/${userProfile.id}/comment`, {
+  //     const response = await fetch(`${IPv4}/user/${userProfile.id}/comment`, {
   //       method: 'POST',
   //       headers: {
   //         'Content-Type': 'application/json',

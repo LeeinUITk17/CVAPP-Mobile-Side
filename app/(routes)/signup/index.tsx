@@ -3,15 +3,15 @@ import { View, Text, TextInput, Button, StyleSheet, Alert, Image } from 'react-n
 import axios from 'axios';
 import { Link, router } from 'expo-router';
 import Footer from '@/components/child_components/Footer';
-
+import Constants from 'expo-constants';
 const SignUp = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
+  const IPv4 = Constants.expoConfig?.extra?.IPv4_Address_URL;
   const handleSignUp = async () => {
     try {
-      await axios.post('http://192.168.130.91:3000/auth/signup', { name, email, password });
+      await axios.post(`${IPv4}/auth/signup`, { name, email, password });
       Alert.alert('Sign Up Successful', 'You can now log in.');
       router.push('/(tabs)');
     } catch (err) {

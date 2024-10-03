@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
 import axios from 'axios';
-
+import Constants from 'expo-constants';
 interface User {
   name: string;
   email: string;
@@ -38,11 +38,12 @@ export const CVContext = createContext<CVContextProps | undefined>(undefined);
 
 export const CVProvider = ({ children }: { children: ReactNode }) => {
   const [cvs, setCvs] = useState<CV[] | null>(null);
-
+  const IPv4 = Constants.expoConfig?.extra?.IPv4_Address_URL;
   useEffect(() => {
     const fetchCVs = async () => {
       try {
-        const response = await axios.get('http://192.168.130.91:3000/user/all');
+        console.log(IPv4);
+        const response = await axios.get(`${IPv4}/user/all`);
         const data = (response.data as CV[]).map((cv: CV) => ({
           id: cv.id,
           createdAt: cv.createdAt,

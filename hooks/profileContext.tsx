@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-
+import Constants from 'expo-constants';
 interface UserProfile {
   id: number;
   name: string;
@@ -24,12 +24,12 @@ export const UserProfileContext = createContext<UserProfileContextProps | undefi
 
 export const UserProfileProvider = ({ children }: { children: ReactNode }) => {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
-
+  const IPv4 = Constants.expoConfig?.extra?.IPv4_Address_URL;
   useEffect(() => {
     const fetchProfile = async () => {
       try {
         const token = await AsyncStorage.getItem('access_token');
-        const response = await axios.get('http://192.168.130.91:3000/auth/profile', {
+        const response = await axios.get(`${IPv4}/auth/profile`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUserProfile(response.data as UserProfile);
